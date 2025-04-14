@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <title>Telegram Motivation Bot</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #212529;
+            color: #f8f9fa;
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+        }
+        .message-box {
+            background-color: #343a40;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            white-space: pre-line;
+            border-left: 4px solid #0d6efd;
+        }
+        .card {
+            margin-bottom: 2rem;
+            border: none;
+            background-color: #2c3034;
+            color: #f8f9fa;
+            box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
+        }
+        .card-header {
+            font-weight: 600;
+            background-color: #212529;
+            color: #0d6efd;
+            border-bottom: 1px solid #444;
+        }
+        .bot-demo-title {
+            border-bottom: 2px solid #0d6efd;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            color: #f8f9fa;
+        }
+        .btn-primary {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+        .btn-outline-light {
+            color: #f8f9fa;
+            border-color: #f8f9fa;
+        }
+        .btn-outline-info {
+            color: #0dcaf0;
+            border-color: #0dcaf0;
+        }
+        .list-group-item {
+            background-color: #343a40;
+            color: #f8f9fa;
+            border-color: #444;
+        }
+        .badge {
+            font-size: 0.8em;
+        }
+        .text-muted {
+            color: #adb5bd !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="text-center mb-5">
+                    <h1 class="display-4">💪 Воин мотивации</h1>
+                    <p class="lead">Telegram бот для ежедневного личностного роста с воинским мышлением</p>
+                </div>
+                
+                <div class="card mb-4">
+                    <div class="card-header">О боте</div>
+                    <div class="card-body">
+                        <p>Telegram бот, разработанный для тех, кто стремится укрепить самодисциплину и развить в себе воинский дух. Бот отправляет:</p>
+                        <ul>
+                            <li>Утренние мотивационные сообщения в 8:00 - чтобы зарядить день силой и целенаправленностью</li>
+                            <li>Вечерние подсказки для рефлексии в 22:00 - для анализа достижений и извлечения уроков</li>
+                        </ul>
+                        <p>Основная идея бота - помочь выработать внутреннюю силу и дисциплину через ежедневную практику самоконтроля и рефлексии.</p>
+                    </div>
+                </div>
+                
+                <h2 class="bot-demo-title">Демонстрация сообщений бота</h2>
+                
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">Утреннее сообщение</div>
+                            <div class="card-body">
+                                <div class="message-box" id="morning-message">Вставай, воин. Вот твой путь на сегодня:<br><br>Тема: Контроль над импульсом<br>1. Откажись от одной слабости.<br>2. Замечай импульсы. Наблюдай, не действуй.<br>3. Сделай одно действие, которое обычно откладываешь.<br><br>Фраза дня: "Я выбираю делать то, что делает меня сильнее, а не то, что легче."</div>
+                                <button class="btn btn-primary mt-2" onclick="refreshMorningMessage()">Показать другое утреннее сообщение</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">Дневное напоминание</div>
+                            <div class="card-body">
+                                <div class="message-box" id="reminder-message">⚔️ Напоминание воина: Как продвигается твоя битва сегодня? Помни о своих целях и оставайся сосредоточенным.</div>
+                                <button class="btn btn-primary mt-2" onclick="refreshReminderMessage()">Показать другое напоминание</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">Вечернее сообщение</div>
+                            <div class="card-body">
+                                <div class="message-box" id="evening-message">Ты был сегодня сильным?<br>Запиши 3 вещи:<br>1. Где я победил?<br>2. Где меня потащило?<br>3. Как я себя чувствую после самоконтроля?</div>
+                                <button class="btn btn-primary mt-2" onclick="refreshEveningMessage()">Показать другое вечернее сообщение</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mt-4">
+                    <div class="card-header">Команды бота</div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span><strong>/start</strong> - Активировать ежедневные сообщения</span>
+                                <span class="badge bg-primary rounded-pill">Основная</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span><strong>/stop</strong> - Приостановить ежедневные сообщения</span>
+                                <span class="badge bg-secondary rounded-pill">Управление</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span><strong>/remind</strong> - Получить мотивационное напоминание</span>
+                                <span class="badge bg-warning rounded-pill">Мотивация</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span><strong>/help</strong> - Показать справочную информацию</span>
+                                <span class="badge bg-info rounded-pill">Помощь</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-5">
+                    <p class="text-muted">Чтобы использовать бота, вам нужно:</p>
+                    <ol class="text-start mx-auto" style="display: inline-block;">
+                        <li>Получить токен от @BotFather в Telegram</li>
+                        <li>Установить зависимости: python-telegram-bot</li>
+                        <li>Запустить скрипт bot.py со своим токеном</li>
+                    </ol>
+                    <div class="mt-3">
+                        <a href="https://github.com/your-repo/telegram-motivation-bot" class="btn btn-outline-light mx-2">GitHub репозиторий</a>
+                        <a href="https://t.me/BotFather" class="btn btn-outline-info mx-2">Создать бота через BotFather</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Массив утренних мотивационных сообщений
+        const morningMessages = [
+            'Вставай, воин. Вот твой путь на сегодня:<br><br>Тема: Контроль над импульсом<br>1. Откажись от одной слабости.<br>2. Замечай импульсы. Наблюдай, не действуй.<br>3. Сделай одно действие, которое обычно откладываешь.<br><br>Фраза дня: "Я выбираю делать то, что делает меня сильнее, а не то, что легче."',
+            
+            'Доброе утро, созидатель. Твой фокус на сегодня:<br><br>Тема: Осознанное присутствие<br>1. Проведи 5 минут в тишине перед началом дня.<br>2. Во время еды отложи телефон и почувствуй вкус.<br>3. Сделай одно дело в полном присутствии без отвлечений.<br><br>Фраза дня: "Моя сила в моем присутствии здесь и сейчас."',
+            
+            'Пора действовать. Вот твой план на сегодня:<br><br>Тема: Эффективное движение<br>1. Определи три главные задачи дня.<br>2. Устрани один отвлекающий фактор.<br>3. Работай интервалами: 25 минут фокуса, 5 минут отдыха.<br><br>Фраза дня: "Я не жду идеальных условий. Я создаю результаты."'
+        ];
+        
+        // Массив дневных напоминаний
+        const reminderMessages = [
+            '⚔️ Напоминание воина: Как продвигается твоя битва сегодня? Помни о своих целях и оставайся сосредоточенным.',
+            '🔥 Середина дня - время проверить свой прогресс. Ты уже сделал шаг к самосовершенствованию сегодня?',
+            '🛡️ Воин-напоминание: Сделай паузу на 2 минуты. Глубоко вдохни. Почувствуй свою силу. Продолжай сражаться.',
+            '⏱️ Взгляни на свои приоритеты. Что действительно важно сделать до конца дня? Сконцентрируйся на этом.',
+            '💧 Момент осознанности: Сделай глоток воды. Почувствуй, как она течет. Вернись к настоящему моменту.',
+            '🧠 Проверь свои мысли: они тебя усиливают или ослабляют? Воин контролирует свой разум.',
+            '🏆 Напоминание: Дисциплина - это свобода. Твой выбор сейчас определяет твое будущее.',
+            '⚡ Энергетическая перезагрузка: Встань, сделай 10 глубоких вдохов и 10 приседаний. Верни себе энергию воина.',
+            '🔄 Проверь, не отклонился ли ты от утреннего плана. Еще есть время вернуться на путь.',
+            '🧘 Минута тишины: останови все, закрой глаза и прочувствуй момент. Вернись сильнее.'
+        ];
+        
+        // Массив вечерних рефлексивных вопросов
+        const eveningMessages = [
+            'Ты был сегодня сильным?<br>Запиши 3 вещи:<br>1. Где я победил?<br>2. Где меня потащило?<br>3. Как я себя чувствую после самоконтроля?',
+            
+            'Время вечернего анализа:<br>1. Какое решение сегодня меня усилило?<br>2. Какие эмоции управляли мной сегодня?<br>3. Что я сделаю иначе завтра?',
+            
+            'Твой день завершается. Подумай:<br>1. Чем я горжусь сегодня?<br>2. Какие привычки я укрепил?<br>3. Как я стал лучше, чем вчера?'
+        ];
+        
+        // Функция для получения случайного элемента из массива
+        function getRandomItem(array) {
+            return array[Math.floor(Math.random() * array.length)];
+        }
+        
+        // Функция для обновления утреннего сообщения
+        function refreshMorningMessage() {
+            const messageBox = document.getElementById('morning-message');
+            messageBox.innerHTML = getRandomItem(morningMessages);
+        }
+        
+        // Функция для обновления дневного напоминания
+        function refreshReminderMessage() {
+            const messageBox = document.getElementById('reminder-message');
+            messageBox.innerHTML = getRandomItem(reminderMessages);
+        }
+        
+        // Функция для обновления вечернего сообщения
+        function refreshEveningMessage() {
+            const messageBox = document.getElementById('evening-message');
+            messageBox.innerHTML = getRandomItem(eveningMessages);
+        }
+    </script>
+</body>
+</html>
